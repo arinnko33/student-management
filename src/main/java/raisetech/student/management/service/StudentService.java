@@ -19,6 +19,7 @@ public class StudentService {
   private final StudentCourseRepository studentCourseRepository;
   private final StudentConverter studentConverter;
 
+
   // 全受講生を検索
   public List<Student> findAllStudents() {
     return repository.findAll();
