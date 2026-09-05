@@ -42,22 +42,51 @@
     <th>カナ名</th>
     <th>ニックネーム</th>
     <th>メールアドレス</th>
+    <th>地域</th>
     <th>年齢</th>
     <th>性別</th>
     <th>備考</th>
+    <th>コース名</th>
+    <th>開始日</th>
+    <th>終了日</th>
   </tr>
   </thead>
 
   <tbody>
-  <tr th:each="student : ${students}">
-    <td th:text="${student.id}"></td>
-    <td th:text="${student.name}"></td>
-    <td th:text="${student.furigana}"></td>
-    <td th:text="${student.nickname}"></td>
-    <td th:text="${student.email}"></td>
-    <td th:text="${student.age}"></td>
-    <td th:text="${student.gender}"></td>
-    <td th:text="${student.note}"></td>
+  <tr th:each="detail : ${studentDetails}">
+    <td th:text="${detail.student.id}"></td>
+
+    <td>
+      <a th:href="@{/students/{id}/edit(id=${detail.student.id})}"
+         th:text="${detail.student.name}">
+      </a>
+    </td>
+
+    <td th:text="${detail.student.furigana}"></td>
+    <td th:text="${detail.student.nickname}"></td>
+    <td th:text="${detail.student.email}"></td>
+    <td th:text="${detail.student.region}"></td>
+    <td th:text="${detail.student.age}"></td>
+    <td th:text="${detail.student.gender}"></td>
+    <td th:text="${detail.student.note}"></td>
+
+    <td>
+      <div th:each="course : ${detail.studentCourses}">
+        <span th:text="${course.courseName}"></span>
+      </div>
+    </td>
+
+    <td>
+      <div th:each="course : ${detail.studentCourses}">
+        <span th:text="${course.startDate}"></span>
+      </div>
+    </td>
+
+    <td>
+      <div th:each="course : ${detail.studentCourses}">
+        <span th:text="${course.endDate}"></span>
+      </div>
+    </td>
   </tr>
   </tbody>
 </table>

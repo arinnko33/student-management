@@ -29,7 +29,7 @@ public class StudentController {
   // 受講生一覧画面（Thymeleaf）
   @GetMapping("/studentList")
   public String studentList(Model model) {
-    model.addAttribute("students", studentService.findAllStudents());
+    model.addAttribute("studentDetails", studentService.getStudentDetails());
     return "studentList";
   }
 
@@ -45,6 +45,17 @@ public class StudentController {
   @GetMapping("/students")
   public List<Student> findAll() {
     return studentService.findAllStudents();
+  }
+
+  // 受講生更新画面
+  @GetMapping("/students/{id}/edit")
+  public String showUpdateStudentForm(@PathVariable int id, Model model) {
+    model.addAttribute("student", studentService.findStudentById(id));
+    model.addAttribute("studentCourses",
+        studentService.getStudentCourses(id));
+    model.addAttribute("courses",
+        studentService.getCourseNames());
+    return "updateStudent";
   }
 
   // 30代の受講生を検索（JSON）
@@ -82,8 +93,53 @@ public class StudentController {
   // 更新
   @ResponseBody
   @PutMapping("/students")
-  public void updateStudent(@RequestBody Student student) {
-    studentService.updateStudent(student);
+  public void updateStudent(
+      @RequestBody Student student,
+      @RequestParam String courseName,
+      @RequestParam LocalDate startDate,
+      @RequestParam LocalDate endDate) {
+
+    studentService.updateStudent(
+        student,
+        courseName,
+        startDate,
+        endDate
+    );
+  }
+
+  @PostMapping("/students/update")
+  public String updateStudentFromForm(
+      @ModelAttribute Student student,
+      @RequestParam(required = false) String courseName,
+      @RequestParam(required = false) LocalDate startDate,
+      @RequestParam(required = false) LocalDate endDate) {
+
+    studentService.updateStudent(
+        student,
+        courseName,
+        startDate,
+        endDate
+    );
+
+    return "redirect:/studentList";
+  }
+
+  // コース追加
+  @PostMapping("/students/{id}/courses")
+  public String addStudentCourse(
+      @PathVariable int id,
+      @RequestParam String courseName,
+      @RequestParam LocalDate startDate,
+      @RequestParam LocalDate endDate) {
+
+    studentService.addStudentCourse(
+        id,
+        courseName,
+        startDate,
+        endDate
+    );
+
+    return "redirect:/students/" + id + "/edit";
   }
 
   // 削除
@@ -96,8 +152,8 @@ public class StudentController {
   // コース検索
   @ResponseBody
   @GetMapping("/courses")
-  public List<StudentCourse> getCourses() {
-    return studentService.getCourses();
+  public List<String> getCourses() {
+    return studentService.getCourseNames();
   }
 
   // Javaコースを検索
