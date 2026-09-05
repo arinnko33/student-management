@@ -56,6 +56,13 @@
   </div>
 
   <div>
+    <label>
+      <input type="checkbox" th:field="*{deleteFlag}">
+      キャンセル
+    </label>
+  </div>
+
+  <div>
     <label>受講コース名：</label>
     <select name="courseName">
       <option th:each="course : ${courses}"
