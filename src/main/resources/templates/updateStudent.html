@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>受講生更新</title>
+</head>
+<body>
+
+<h1>受講生情報更新</h1>
+
+<form th:action="@{/students/update}" th:object="${student}" method="post">
+
+  <div>
+    <label>ID：</label>
+    <input type="text" th:field="*{id}" readonly>
+  </div>
+
+  <div>
+    <label>名前：</label>
+    <input type="text" th:field="*{name}">
+  </div>
+
+  <div>
+    <label>ニックネーム：</label>
+    <input type="text" th:field="*{nickname}">
+  </div>
+
+  <div>
+    <label>ふりがな：</label>
+    <input type="text" th:field="*{furigana}">
+  </div>
+
+  <div>
+    <label>年齢：</label>
+    <input type="number" th:field="*{age}">
+  </div>
+
+  <div>
+    <label>性別：</label>
+    <input type="text" th:field="*{gender}">
+  </div>
+
+  <div>
+    <label>メールアドレス：</label>
+    <input type="email" th:field="*{email}">
+  </div>
+
+  <div>
+    <label>地域：</label>
+    <input type="text" th:field="*{region}">
+  </div>
+
+  <div>
+    <label>備考：</label>
+    <textarea th:field="*{note}"></textarea>
+  </div>
+
+  <div>
+    <label>受講コース名：</label>
+    <select name="courseName">
+      <option th:each="course : ${courses}"
+              th:value="${course}"
+              th:text="${course}"
+              th:selected="${!studentCourses.isEmpty() and course == studentCourses[0].courseName}">
+      </option>
+    </select>
+  </div>
+
+  <div>
+    <label>受講開始日：</label>
+    <input type="date"
+           name="startDate"
+           th:value="${!studentCourses.isEmpty() ? studentCourses[0].startDate : ''}">
+  </div>
+
+  <div>
+    <label>受講終了日：</label>
+    <input type="date"
+           name="endDate"
+           th:value="${!studentCourses.isEmpty() ? studentCourses[0].endDate : ''}">
+  </div>
+
+  <button type="submit">更新</button>
+
+  </form>
+
+  <hr>
+
+  <h2>コースを追加</h2>
+
+  <form th:action="@{/students/{id}/courses(id=${student.id})}" method="post">
+
+    <div>
+      <label>追加するコース名：</label>
+      <select name="courseName">
+        <option th:each="course : ${courses}"
+                th:value="${course}"
+                th:text="${course}">
+        </option>
+      </select>
+    </div>
+
+    <div>
+      <label>受講開始日：</label>
+      <input type="date" name="startDate">
+    </div>
+
+    <div>
+      <label>受講終了日：</label>
+      <input type="date" name="endDate">
+    </div>
+
+    <button type="submit">コースを追加</button>
+
+  </form>
+
+</body>
+</html>

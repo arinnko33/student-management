@@ -13,37 +13,39 @@ public interface StudentRepository {
 
   // 全受講生を検索
   @Select("""
-      SELECT
-          id,
-          nickname,
-          name,
-          furigana,
-          age,
-          gender,
-          email,
-          note,
-          delete_flag
-      FROM students
-      WHERE delete_flag = 0
-      """)
+    SELECT
+        id,
+        nickname,
+        name,
+        furigana,
+        age,
+        gender,
+        email,
+        region,
+        note,
+        delete_flag
+    FROM students
+    WHERE delete_flag = 0
+    """)
   List<Student> findAll();
 
   // IDで受講生を検索
   @Select("""
-      SELECT
-          id,
-          nickname,
-          name,
-          furigana,
-          age,
-          gender,
-          email,
-          note,
-          delete_flag
-      FROM students
-      WHERE id = #{id}
-        AND delete_flag = 0
-      """)
+    SELECT
+        id,
+        nickname,
+        name,
+        furigana,
+        age,
+        gender,
+        email,
+        region,
+        note,
+        delete_flag
+    FROM students
+    WHERE id = #{id}
+      AND delete_flag = 0
+    """)
   Student findById(int id);
 
   // 登録
@@ -56,6 +58,7 @@ public interface StudentRepository {
         age,
         gender,
         email,
+        region,
         note,
         delete_flag
     )
@@ -67,6 +70,7 @@ public interface StudentRepository {
         #{age},
         #{gender},
         #{email},
+        #{region},
         #{note},
         #{deleteFlag}
     )
@@ -76,18 +80,19 @@ public interface StudentRepository {
 
   // 更新
   @Update("""
-      UPDATE students
-      SET
-          nickname = #{nickname},
-          name = #{name},
-          furigana = #{furigana},
-          age = #{age},
-          gender = #{gender},
-          email = #{email},
-          note = #{note},
-          delete_flag = #{deleteFlag}
-      WHERE id = #{id}
-      """)
+    UPDATE students
+    SET
+        nickname = #{nickname},
+        name = #{name},
+        furigana = #{furigana},
+        age = #{age},
+        gender = #{gender},
+        email = #{email},
+        region = #{region},
+        note = #{note},
+        delete_flag = #{deleteFlag}
+    WHERE id = #{id}
+    """)
   void updateStudent(Student student);
 
   // 論理削除
