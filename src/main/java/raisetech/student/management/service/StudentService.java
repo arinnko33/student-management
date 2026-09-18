@@ -64,6 +64,12 @@ public class StudentService {
 
     studentCourseRepository.registerStudentCourse(studentCourse);
   }
+
+  // JSONから新規受講生を登録
+  public void registerStudent(Student student) {
+    repository.registerStudent(student);
+  }
+
   // 更新
   public void updateStudent(Student student) {
     repository.updateStudent(student);
