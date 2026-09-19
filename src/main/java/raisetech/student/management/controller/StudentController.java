@@ -50,8 +50,8 @@ public class StudentController {
   // 30代の受講生を検索（JSON）
   @ResponseBody
   @GetMapping("/students/30s")
-  public List<Student> searchStudentList() {
-    return studentService.searchStudentList();
+  public List<Student> findStudentsInTheir30s() {
+    return studentService.findStudentsInTheir30s();
   }
 
   // 受講生詳細を検索（JSON）

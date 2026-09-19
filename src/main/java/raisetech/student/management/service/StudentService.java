@@ -25,8 +25,8 @@ public class StudentService {
   }
 
   // 30代の受講生を検索
-  public List<Student> searchStudentList() {
-    return repository.search();
+  public List<Student> findStudentsInTheir30s() {
+    return repository.findStudentsInTheir30s();
   }
 
   // 全受講生の詳細情報を検索

@@ -101,13 +101,22 @@ public interface StudentRepository {
 
   // 30代の受講生を検索
   @Select("""
-      SELECT *
-      FROM students
-      WHERE age >= 30
-        AND age < 40
-        AND delete_flag = 0
-      """)
-  List<Student> search();
+    SELECT
+        id,
+        nickname,
+        name,
+        furigana,
+        age,
+        gender,
+        email,
+        note,
+        delete_flag
+    FROM students
+    WHERE age >= 30
+      AND age < 40
+      AND delete_flag = 0
+    """)
+  List<Student> findStudentsInTheir30s();
 }
 
 
