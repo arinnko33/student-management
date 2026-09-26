@@ -2,7 +2,8 @@ package raisetech.student.management.controller;
 
 import java.time.LocalDate;
 import java.util.List;
-
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,10 +65,15 @@ public class StudentController {
   // 新規受講生登録（Thymeleaf）
   @PostMapping("/students")
   public String registerStudent(
-      @ModelAttribute Student student,
+      @Valid @ModelAttribute Student student,
+      BindingResult bindingResult,
       @RequestParam String courseName,
       @RequestParam LocalDate startDate,
       @RequestParam LocalDate endDate) {
+
+    if (bindingResult.hasErrors()) {
+      return "registerStudent";
+    }
 
     studentService.registerStudent(
         student,
