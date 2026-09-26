@@ -162,4 +162,12 @@ public class StudentController {
   public List<StudentCourse> searchJavaCourse() {
     return studentService.searchJavaCourse();
   }
+
+  // JSONから新規受講生を登録
+  @ResponseBody
+  @PostMapping("/students/json")
+  public Student registerStudentByJson(@RequestBody Student student) {
+    studentService.registerStudent(student);
+    return student;
+  }
 }
