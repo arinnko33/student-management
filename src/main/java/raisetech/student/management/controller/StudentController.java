@@ -20,6 +20,7 @@ import raisetech.student.management.data.Student;
 import raisetech.student.management.data.StudentCourse;
 import raisetech.student.management.domain.StudentDetail;
 import raisetech.student.management.service.StudentService;
+import raisetech.student.management.controller.exceptionhandler.StudentNotFoundException;
 
 @Controller
 @RequiredArgsConstructor
@@ -119,5 +120,12 @@ public class StudentController {
   public Student registerStudentByJson(@RequestBody Student student) {
     studentService.registerStudent(student);
     return student;
+  }
+
+  // 例外発生テスト
+  @ResponseBody
+  @GetMapping("/students/error")
+  public String error() {
+    throw new StudentNotFoundException("受講生が見つかりません");
   }
 }
