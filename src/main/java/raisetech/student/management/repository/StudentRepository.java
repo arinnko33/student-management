@@ -1,17 +1,24 @@
 package raisetech.student.management.repository;
 
 import java.util.List;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 import raisetech.student.management.data.Student;
 
 @Mapper
 public interface StudentRepository {
 
   // 全受講生を検索
+<<<<<<< HEAD
+  List<Student> findAll();
+
+  // IDで受講生を検索
+  Student findById(int id);
+
+  // 登録
+  void registerStudent(Student student);
+
+  // 更新
+=======
   @Select("""
     SELECT
         id,
@@ -93,34 +100,13 @@ public interface StudentRepository {
         delete_flag = #{deleteFlag}
     WHERE id = #{id}
     """)
+>>>>>>> origin/main
   void updateStudent(Student student);
 
   // 論理削除
-  @Update("""
-      UPDATE students
-      SET
-          delete_flag = 1
-      WHERE id = #{id}
-      """)
   void deleteStudent(int id);
 
   // 30代の受講生を検索
-  @Select("""
-    SELECT
-        id,
-        nickname,
-        name,
-        furigana,
-        age,
-        gender,
-        email,
-        note,
-        delete_flag
-    FROM students
-    WHERE age >= 30
-      AND age < 40
-      AND delete_flag = 0
-    """)
   List<Student> findStudentsInTheir30s();
 }
 
