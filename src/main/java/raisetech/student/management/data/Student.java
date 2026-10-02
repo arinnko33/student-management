@@ -14,6 +14,7 @@ public class Student {
   private int age;
   private String gender;
   private String email;
+  private String region;
   private String note;
   private boolean deleteFlag;
 }

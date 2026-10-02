@@ -36,6 +36,13 @@ public interface StudentCourseRepository {
     """)
   List<StudentCourse> findAll();
 
+  // コース名を重複なしで検索
+  @Select("""
+    SELECT DISTINCT course_name
+    FROM students_courses
+    """)
+  List<String> findAllCourseNames();
+
   // 受講生IDからコースを検索
   @Select("""
     SELECT

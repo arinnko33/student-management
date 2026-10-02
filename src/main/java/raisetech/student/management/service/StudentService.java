@@ -19,11 +19,16 @@ public class StudentService {
   private final StudentCourseRepository studentCourseRepository;
   private final StudentConverter studentConverter;
 
+
   // 全受講生を検索
   public List<Student> findAllStudents() {
     return repository.findAll();
   }
 
+  // IDから受講生を検索
+  public Student findStudentById(int id) {
+    return repository.findById(id);
+  }
   // 30代の受講生を検索
   public List<Student> findStudentsInTheir30s() {
     return repository.findStudentsInTheir30s();
@@ -71,8 +76,33 @@ public class StudentService {
   }
 
   // 更新
-  public void updateStudent(Student student) {
+  public void updateStudent(
+      Student student,
+      String courseName,
+      LocalDate startDate,
+      LocalDate endDate) {
+
+    // 受講生情報を更新
     repository.updateStudent(student);
+
+    // 受講生のコース情報を検索
+    List<StudentCourse> studentCourses =
+        studentCourseRepository.findByStudentId(student.getId());
+
+    // コース情報がある場合だけ更新
+    if (!studentCourses.isEmpty()
+        && courseName != null
+        && startDate != null
+        && endDate != null) {
+
+      StudentCourse studentCourse = studentCourses.get(0);
+
+      studentCourse.setCourseName(courseName);
+      studentCourse.setStartDate(startDate);
+      studentCourse.setEndDate(endDate);
+
+      studentCourseRepository.updateStudentCourse(studentCourse);
+    }
   }
 
   // 削除
@@ -80,14 +110,34 @@ public class StudentService {
     repository.deleteStudent(id);
   }
 
-  // 全コースを検索
-  public List<StudentCourse> getCourses() {
-    return studentCourseRepository.findAll();
+  // コース名を重複なしで検索
+  public List<String> getCourseNames() {
+    return studentCourseRepository.findAllCourseNames();
   }
 
   // Javaコースを検索
   public List<StudentCourse> searchJavaCourse() {
     return studentCourseRepository.searchJavaCourse();
+  }
 
+  // 受講生のコース情報を検索
+  public List<StudentCourse> getStudentCourses(int studentId) {
+    return studentCourseRepository.findByStudentId(studentId);
+  }
+
+  public void addStudentCourse(
+      int studentId,
+      String courseName,
+      LocalDate startDate,
+      LocalDate endDate) {
+
+    StudentCourse studentCourse = new StudentCourse();
+
+    studentCourse.setStudentId(studentId);
+    studentCourse.setCourseName(courseName);
+    studentCourse.setStartDate(startDate);
+    studentCourse.setEndDate(endDate);
+
+    studentCourseRepository.registerStudentCourse(studentCourse);
   }
 }
