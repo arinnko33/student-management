@@ -185,7 +185,7 @@ public class StudentController {
   @Operation(summary = "JSONから受講生を登録する")
   @ResponseBody
   @PostMapping("/students/json")
-  public Student registerStudentByJson(@RequestBody Student student) {
+  public Student registerStudentByJson(@Valid @RequestBody Student student) {
     studentService.registerStudent(student);
     return student;
   }
