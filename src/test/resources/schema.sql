@@ -10,3 +10,19 @@ CREATE TABLE students (
                           note VARCHAR(1000),
                           delete_flag INT DEFAULT 0
 );
+
+CREATE TABLE students_courses (
+                                  id INT AUTO_INCREMENT PRIMARY KEY,
+                                  student_id INT NOT NULL,
+                                  course_name VARCHAR(100) NOT NULL,
+                                  start_date DATE NOT NULL,
+                                  end_date DATE NOT NULL,
+                                  FOREIGN KEY (student_id) REFERENCES students(id)
+);
+
+CREATE TABLE students_courses_status (
+                                         id INT AUTO_INCREMENT PRIMARY KEY,
+                                         student_course_id INT NOT NULL UNIQUE,
+                                         status VARCHAR(30) NOT NULL,
+                                         FOREIGN KEY (student_course_id) REFERENCES students_courses(id)
+);

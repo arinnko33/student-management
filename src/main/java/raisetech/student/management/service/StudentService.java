@@ -1,5 +1,7 @@
 package raisetech.student.management.service;
 
+import raisetech.student.management.data.StudentCourseStatus;
+import raisetech.student.management.repository.StudentCourseStatusRepository;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +19,8 @@ public class StudentService {
 
   private final StudentRepository repository;
   private final StudentCourseRepository studentCourseRepository;
+  private final StudentCourseStatusRepository studentCourseStatusRepository;
   private final StudentConverter studentConverter;
-
 
   // 全受講生を検索
   public List<Student> findAllStudents() {
@@ -68,6 +70,8 @@ public class StudentService {
     studentCourse.setEndDate(endDate);
 
     studentCourseRepository.registerStudentCourse(studentCourse);
+
+    registerStudentCourseStatus(studentCourse.getId(), "仮申込");
   }
 
   // JSONから新規受講生を登録
@@ -139,5 +143,51 @@ public class StudentService {
     studentCourse.setEndDate(endDate);
 
     studentCourseRepository.registerStudentCourse(studentCourse);
+
+    registerStudentCourseStatus(studentCourse.getId(), "仮申込");
+  }
+
+  // 受講生コース情報IDから申込状況を検索
+  public StudentCourseStatus getStudentCourseStatus(int studentCourseId) {
+    return studentCourseStatusRepository.findByStudentCourseId(studentCourseId);
+  }
+
+  // 申込状況をすべて検索
+  public List<StudentCourseStatus> getAllStudentCourseStatuses() {
+    return studentCourseStatusRepository.findAll();
+  }
+
+  // 申込状況を登録
+  public void registerStudentCourseStatus(
+      int studentCourseId,
+      String status) {
+
+    StudentCourseStatus studentCourseStatus = new StudentCourseStatus();
+    studentCourseStatus.setStudentCourseId(studentCourseId);
+    studentCourseStatus.setStatus(status);
+
+    studentCourseStatusRepository.registerStatus(studentCourseStatus);
+  }
+
+  // 申込状況を更新
+  public void updateStudentCourseStatus(
+      int studentCourseId,
+      String status) {
+
+    StudentCourseStatus studentCourseStatus =
+        studentCourseStatusRepository.findByStudentCourseId(studentCourseId);
+
+    if (studentCourseStatus == null) {
+      throw new IllegalArgumentException(
+          "指定されたコースの申込状況が見つかりません。");
+    }
+
+    studentCourseStatus.setStatus(status);
+    studentCourseStatusRepository.updateStatus(studentCourseStatus);
+  }
+
+  // 申込状況から受講生を検索
+  public List<Student> findStudentsByCourseStatus(String status) {
+    return repository.findStudentsByCourseStatus(status);
   }
 }

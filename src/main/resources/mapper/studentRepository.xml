@@ -101,5 +101,27 @@
     AND delete_flag = 0
   </select>
 
+  <!-- 申込状況から受講生を検索 -->
+  <select id="findStudentsByCourseStatus"
+    resultType="raisetech.student.management.data.Student">
+    SELECT DISTINCT
+    s.id,
+    s.nickname,
+    s.name,
+    s.furigana,
+    s.age,
+    s.gender,
+    s.email,
+    s.note,
+    s.delete_flag
+    FROM students s
+    INNER JOIN students_courses sc
+    ON s.id = sc.student_id
+    INNER JOIN students_courses_status scs
+    ON sc.id = scs.student_course_id
+    WHERE scs.status = #{status}
+    AND s.delete_flag = 0
+  </select>
+
 </mapper>
 
