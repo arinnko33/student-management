@@ -70,6 +70,8 @@ public class StudentService {
     studentCourse.setEndDate(endDate);
 
     studentCourseRepository.registerStudentCourse(studentCourse);
+
+    registerStudentCourseStatus(studentCourse.getId(), "仮申込");
   }
 
   // JSONから新規受講生を登録
@@ -141,7 +143,10 @@ public class StudentService {
     studentCourse.setEndDate(endDate);
 
     studentCourseRepository.registerStudentCourse(studentCourse);
+
+    registerStudentCourseStatus(studentCourse.getId(), "仮申込");
   }
+
   // 受講生コース情報IDから申込状況を検索
   public StudentCourseStatus getStudentCourseStatus(int studentCourseId) {
     return studentCourseStatusRepository.findByStudentCourseId(studentCourseId);

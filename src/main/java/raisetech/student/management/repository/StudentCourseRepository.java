@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import raisetech.student.management.data.StudentCourse;
+import org.apache.ibatis.annotations.Options;
 
 @Mapper
 public interface StudentCourseRepository {
@@ -14,25 +15,31 @@ public interface StudentCourseRepository {
   // Javaコースを検索
   @Select("""
     SELECT
-        id,
-        student_id,
-        course_name,
-        start_date,
-        end_date
-    FROM students_courses
-    WHERE course_name = 'Javaコース'
+        sc.id,
+        sc.student_id,
+        sc.course_name,
+        sc.start_date,
+        sc.end_date,
+        scs.status
+    FROM students_courses sc
+    LEFT JOIN students_courses_status scs
+        ON sc.id = scs.student_course_id
+    WHERE sc.course_name = 'Javaコース'
     """)
   List<StudentCourse> searchJavaCourse();
 
   // 全コースを検索
   @Select("""
     SELECT
-        id,
-        student_id,
-        course_name,
-        start_date,
-        end_date
-    FROM students_courses
+        sc.id,
+        sc.student_id,
+        sc.course_name,
+        sc.start_date,
+        sc.end_date,
+        scs.status
+    FROM students_courses sc
+    LEFT JOIN students_courses_status scs
+        ON sc.id = scs.student_course_id
     """)
   List<StudentCourse> findAll();
 
@@ -46,33 +53,38 @@ public interface StudentCourseRepository {
   // 受講生IDからコースを検索
   @Select("""
     SELECT
-        id,
+        sc.id,
+        sc.student_id,
+        sc.course_name,
+        sc.start_date,
+        sc.end_date,
+        scs.status
+    FROM students_courses sc
+    LEFT JOIN students_courses_status scs
+        ON sc.id = scs.student_course_id
+    WHERE sc.student_id = #{studentId}
+    """)
+  List<StudentCourse> findByStudentId(int studentId);
+
+
+  // 登録
+  @Insert("""
+    INSERT INTO students_courses
+    (
         student_id,
         course_name,
         start_date,
         end_date
-    FROM students_courses
-    WHERE student_id = #{studentId}
+    )
+    VALUES
+    (
+        #{studentId},
+        #{courseName},
+        #{startDate},
+        #{endDate}
+    )
     """)
-  List<StudentCourse> findByStudentId(int studentId);
-
-  // 登録
-  @Insert("""
-      INSERT INTO students_courses
-      (
-          student_id,
-          course_name,
-          start_date,
-          end_date
-      )
-      VALUES
-      (
-          #{studentId},
-          #{courseName},
-          #{startDate},
-          #{endDate}
-      )
-      """)
+  @Options(useGeneratedKeys = true, keyProperty = "id")
   void registerStudentCourse(StudentCourse studentCourse);
 
   // 更新
