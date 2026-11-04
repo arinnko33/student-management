@@ -22,6 +22,8 @@ class StudentRepositoryTest {
 
   @BeforeEach
   void setUp() {
+    jdbcTemplate.update("DELETE FROM students_courses_status");
+    jdbcTemplate.update("DELETE FROM students_courses");
     jdbcTemplate.update("DELETE FROM students");
 
     // テストデータを5件登録
@@ -149,5 +151,59 @@ class StudentRepositoryTest {
     assertThat(students)
         .extracting(Student::getName)
         .containsExactlyInAnyOrder("30歳の受講生", "39歳の受講生");
+  }
+
+  @Test
+  void findStudentsByCourseStatus_仮申込の受講生を検索できる() {
+    insertStudentCourseStatus("仮申込");
+
+    var students = studentRepository.findStudentsByCourseStatus("仮申込");
+
+    assertThat(students).hasSize(1);
+    assertThat(students.get(0).getId()).isEqualTo(1);
+  }
+
+  @Test
+  void findStudentsByCourseStatus_本申込の受講生を検索できる() {
+    insertStudentCourseStatus("本申込");
+
+    var students = studentRepository.findStudentsByCourseStatus("本申込");
+
+    assertThat(students).hasSize(1);
+    assertThat(students.get(0).getId()).isEqualTo(1);
+  }
+
+  @Test
+  void findStudentsByCourseStatus_受講中の受講生を検索できる() {
+    insertStudentCourseStatus("受講中");
+
+    var students = studentRepository.findStudentsByCourseStatus("受講中");
+
+    assertThat(students).hasSize(1);
+    assertThat(students.get(0).getId()).isEqualTo(1);
+  }
+
+  @Test
+  void findStudentsByCourseStatus_受講終了の受講生を検索できる() {
+    insertStudentCourseStatus("受講終了");
+
+    var students = studentRepository.findStudentsByCourseStatus("受講終了");
+
+    assertThat(students).hasSize(1);
+    assertThat(students.get(0).getId()).isEqualTo(1);
+  }
+
+  private void insertStudentCourseStatus(String status) {
+    jdbcTemplate.update("""
+      INSERT INTO students_courses
+      (id, student_id, course_name, start_date, end_date)
+      VALUES (1, 1, 'Javaコース', '2026-01-01', '2026-06-30')
+      """);
+
+    jdbcTemplate.update("""
+      INSERT INTO students_courses_status
+      (student_course_id, status)
+      VALUES (1, ?)
+      """, status);
   }
 }

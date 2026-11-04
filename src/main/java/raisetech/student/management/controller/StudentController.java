@@ -197,4 +197,28 @@ public class StudentController {
   public String error() {
     throw new StudentNotFoundException("受講生が見つかりません");
   }
+
+  // コースの申込状況を更新
+  @Operation(summary = "コースの申込状況を更新する")
+  @ResponseBody
+  @PutMapping("/student-courses/{studentCourseId}/status")
+  public void updateStudentCourseStatus(
+      @PathVariable int studentCourseId,
+      @RequestParam String status) {
+
+    studentService.updateStudentCourseStatus(
+        studentCourseId,
+        status
+    );
+  }
+
+  // 申込状況から受講生を検索
+  @Operation(summary = "申込状況から受講生を検索する")
+  @ResponseBody
+  @GetMapping("/students/search")
+  public List<Student> findStudentsByCourseStatus(
+      @RequestParam String status) {
+
+    return studentService.findStudentsByCourseStatus(status);
+  }
 }

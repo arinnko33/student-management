@@ -25,6 +25,10 @@ public interface StudentRepository {
 
   // 30代の受講生を検索
   List<Student> findStudentsInTheir30s();
+
+  // 申込状況から受講生を検索
+  List<Student> findStudentsByCourseStatus(
+      @Param("status") String status);
 }
 
 

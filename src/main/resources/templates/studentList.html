@@ -49,6 +49,7 @@
     <th>コース名</th>
     <th>開始日</th>
     <th>終了日</th>
+    <th>申込状況</th>
   </tr>
   </thead>
 
@@ -85,6 +86,12 @@
     <td>
       <div th:each="course : ${detail.studentCourses}">
         <span th:text="${course.endDate}"></span>
+      </div>
+    </td>
+
+    <td>
+      <div th:each="course : ${detail.studentCourses}">
+        <span th:text="${course.status}"></span>
       </div>
     </td>
   </tr>
